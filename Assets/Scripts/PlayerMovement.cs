@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
-    private Animator anim;
+    public Animator anim;
     private BoxCollider2D coll;
     private SpriteRenderer sprite;
     [SerializeField] private LayerMask jumpableGround;
@@ -19,7 +19,9 @@ public class PlayerMovement : MonoBehaviour
     private bool facingRight = true;
     public bool isCrouched = false;
     private float dirX;
-    private enum MovementState { idle, jump, run, cIdle, cRun }
+    private StaminaSystem staminaSystem;
+    [SerializeField] private float jumpStaminaRequirement;
+    private enum MovementState {idle, jump, run, cIdle, cRun}
 
     private void Start()
     {
@@ -28,77 +30,73 @@ public class PlayerMovement : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         standingCollSizeY = coll.size.y;
         standingCollOffsetY = coll.offset.y;
-        crouchingCollSizeY = coll.size.y / 2;
-        crouchingCollOffsetY = coll.offset.y / 2;
+        crouchingCollSizeY = coll.size.y/2;
+        crouchingCollOffsetY = coll.offset.y/2;
         sprite = GetComponent<SpriteRenderer>();
+        staminaSystem = GetComponent<StaminaSystem>();
     }
 
     private void Update()
     {
         dirX = Input.GetAxis("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && isGrounded())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-            ColliderStanding();
+        if (Input.GetButtonDown("Jump") && isGrounded() && staminaSystem.currentStamina > jumpStaminaRequirement) {
+            if (!hasNoRoom()) {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                ColliderStanding();
+                staminaSystem.currentStamina -= jumpStaminaRequirement;
+            }     
         }
-        else if (Input.GetKey("s") && isGrounded())
-        {
+        else if (Input.GetKey("s") && isGrounded()) {  
             rb.velocity = new Vector2(dirX * crouchSpeed, rb.velocity.y);
             ColliderCrouched();
-        }
-        else
-        {
-            rb.velocity = new Vector2(dirX * walkSpeed, rb.velocity.y);
-            ColliderStanding();
+        } 
+        else {  
+            if (hasNoRoom() && isGrounded()) rb.velocity = new Vector2(dirX * crouchSpeed, rb.velocity.y); 
+            else {
+                rb.velocity = new Vector2(dirX * walkSpeed, rb.velocity.y);
+                ColliderStanding();
+            }         
         }
 
-        AnimationUpdate();
+        if (rb.bodyType == RigidbodyType2D.Dynamic) AnimationUpdate();
     }
-
+    
     private void AnimationUpdate()
     {
         MovementState state;
 
-        if (isGrounded())
-        {
-            if (isCrouched)
-            {
+        if (isGrounded()) {
+            if (isCrouched) {
                 if (dirX != 0) state = MovementState.cRun;
                 else state = MovementState.cIdle;
             }
             else if (dirX != 0) state = MovementState.run;
             else state = MovementState.idle;
         }
-        else
-        {
+        else {        
             state = MovementState.jump;
         }
 
-        if (rb.bodyType == RigidbodyType2D.Dynamic)
-        { 
-            if (dirX > 0f)
-            {
-                if (!facingRight) Flip();
-            }
-            else if (dirX < 0f)
-            {
-                if (facingRight) Flip();
-            }
-        }  
-        
+        if (dirX > 0f) {
+            if (!facingRight) Flip();
+        }
+        else if (dirX < 0f) {
+            if (facingRight) Flip();
+        } 
+
         anim.SetInteger("state", (int)state);
     }
 
     private void ColliderStanding()
-    {
+    {   
         isCrouched = false;
         coll.size = new Vector2(coll.size.x, standingCollSizeY);
         coll.offset = new Vector2(coll.offset.x, standingCollOffsetY);
     }
 
-    private void ColliderCrouched()
-    {
+    private void ColliderCrouched() 
+    {   
         isCrouched = true;
         coll.size = new Vector2(coll.size.x, crouchingCollSizeY);
         coll.offset = new Vector2(coll.offset.x, crouchingCollOffsetY);
@@ -110,14 +108,14 @@ public class PlayerMovement : MonoBehaviour
         currentScale.x *= -1;
         rb.transform.localScale = currentScale;
         facingRight = !facingRight;
-    }
+    } 
 
-    private bool hasRoom()
+    private bool hasNoRoom()
     {
-        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.up, 0.1f, jumpableGround);
+        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.up, 0.125f, jumpableGround);
     }
 
-    private bool isGrounded()
+    private bool isGrounded() 
     {
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, 0.1f, jumpableGround);
     }

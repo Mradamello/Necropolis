@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Collectible
-  - Trap
+  - Damagable
   layers:
   - Default
   - TransparentFX
@@ -14,8 +14,8 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 
@@ -40,6 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background2
+    uniqueID: 1288341463
+    locked: 0
+  - name: Background1
+    uniqueID: 3240174397
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Terrain
+    uniqueID: 3886365253
     locked: 0
