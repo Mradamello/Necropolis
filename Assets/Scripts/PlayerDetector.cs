@@ -6,12 +6,13 @@ public class PlayerDetector : MonoBehaviour
 {
     public bool playerDetected { get; private set; }
     public Transform player { get; private set; }
-    public LayerMask layers;
+    public string layerToDetect;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.IsTouchingLayers(layers))
+        if (collision.gameObject.layer == LayerMask.NameToLayer(layerToDetect))
         {
+            Debug.Log("Detected player!");
             playerDetected = true;
             player = collision.gameObject.transform;
         }
@@ -19,8 +20,9 @@ public class PlayerDetector : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer(layerToDetect))
         {
+            Debug.Log("Player left!");
             playerDetected = false;
             player = null;
         }
