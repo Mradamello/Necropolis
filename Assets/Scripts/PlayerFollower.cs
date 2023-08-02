@@ -28,16 +28,9 @@ public class PlayerFollower : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, Time.deltaTime * speed);
         } else if (change)
         {
-            Debug.Log("Change: false");
             change = false;
             usingPlayerFollower = false;
-            if(enemyWaypointFollower.i == 0)
-            {
-                enemyWaypointFollower.i = 1;
-            }else
-            {
-                enemyWaypointFollower.i = 0;
-            }
+            enemyWaypointFollower.i = enemyWaypointFollower.i == 0 ? 1 : 0;
         }
     }
 }

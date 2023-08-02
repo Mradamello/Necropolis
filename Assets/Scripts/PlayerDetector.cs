@@ -13,7 +13,6 @@ public class PlayerDetector : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer(layerToDetect))
         {
-            Debug.Log("Detected player!");
             playerDetected = true;
             player = collision.gameObject.transform;
         }
@@ -23,7 +22,6 @@ public class PlayerDetector : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer(layerToDetect))
         {
-            Debug.Log("Player left!");
             playerDetected = false;
             player = null;
         }

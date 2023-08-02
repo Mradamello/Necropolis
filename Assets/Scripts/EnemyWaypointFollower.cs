@@ -31,7 +31,6 @@ public class EnemyWaypointFollower : MonoBehaviour
         }
         else if (!playerFollower.change && !playerFollower.usingPlayerFollower)
         {
-            Debug.Log("Change: true");
             playerFollower.change = true;
             usingEnemyWaypointFollower = false;
         }
