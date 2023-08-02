@@ -13,10 +13,12 @@ GameObject:
   - component: {fileID: 2719610877532004975}
   - component: {fileID: 2719610877532004947}
   - component: {fileID: 2719610877532004944}
-  - component: {fileID: 2719610877532004945}
   - component: {fileID: 2705387533850179475}
   - component: {fileID: 8032595494845589462}
   - component: {fileID: 5273065859801160795}
+  - component: {fileID: 2636984631977938073}
+  - component: {fileID: 7412442109823487872}
+  - component: {fileID: 8901608756541158297}
   m_Layer: 7
   m_Name: Slime
   m_TagString: Damagable
@@ -32,7 +34,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2719610877532004973}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.045, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -159,22 +161,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2719610877532004945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2719610877532004973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be027e6c8439be547b2793f962082ded, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypoints:
-  - {fileID: 2719610879148531041}
-  - {fileID: 2719610879005969410}
-  speed: 2
 --- !u!114 &2705387533850179475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +203,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60cb50756e8811e4dafc4134105c2a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!61 &2636984631977938073
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2719610877532004973}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.2}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3, y: 1}
+    newSize: {x: 3, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5, y: 1.58}
+  m_EdgeRadius: 0
+--- !u!114 &7412442109823487872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2719610877532004973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c7dc1156e2ffa040af6bd18745a1956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerToDetect: Player
+--- !u!114 &8901608756541158297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2719610877532004973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66853594751443d48af37c6d30b30b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints:
+  - {fileID: 2719610879148531041}
+  - {fileID: 2719610879005969410}
+  speed: 2
+  usingWaypointFollower: 1
 --- !u!1 &2719610878272665094
 GameObject:
   m_ObjectHideFlags: 0
