@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerDetector : MonoBehaviour
@@ -25,5 +26,4 @@ public class PlayerDetector : MonoBehaviour
             player = null;
         }
     }
-
 }
