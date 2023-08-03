@@ -14,11 +14,13 @@ public class HealthSystem : MonoBehaviour
     public DamageSystem damageSystem;
     private PlayerMovement playerMovement;
     public Animator animator;
+    private BoxCollider2D boxCollider;
     private void Start()
     {
         health = healthMax;
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+        boxCollider = GetComponent<BoxCollider2D>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,7 +49,11 @@ public class HealthSystem : MonoBehaviour
             }
         }
         if(dmg > 0) Debug.Log(this.name + " health: " + health);
-        if (health <= 0) animator.SetTrigger("Die");
+        if (health <= 0)
+        {
+            boxCollider.enabled = false;
+            animator.SetTrigger("Die");
+        }
     }
     public void Update()
     {
