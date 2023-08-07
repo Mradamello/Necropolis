@@ -43,9 +43,12 @@ public class AttackSystem : MonoBehaviour
             Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPoint.position, attackRange, 0, enemyLayers);
             foreach(Collider2D Enemy in hitEnemies)
             {
-                Debug.Log("Enemy hit: " + Enemy.name);
-                healthSystem = Enemy.gameObject.GetComponent<HealthSystem>();
-                healthSystem.TakeDamage(attackDamage);
+                if (!Enemy.isTrigger)
+                {
+                    Debug.Log("Enemy hit: " + Enemy.name);
+                    healthSystem = Enemy.gameObject.GetComponent<HealthSystem>();
+                    healthSystem.TakeDamage(attackDamage);
+                }
             }
             lastAttackTime = Time.time;
             isAttacking = false;

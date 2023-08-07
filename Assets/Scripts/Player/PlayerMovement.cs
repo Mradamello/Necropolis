@@ -21,6 +21,16 @@ public class PlayerMovement : MonoBehaviour
     private float dirX;
     private StaminaSystem staminaSystem;
     [SerializeField] private float jumpStaminaRequirement;
+    private TrailRenderer trailRenderer;
+
+    [Header("Dashing")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashTime;
+    [SerializeField] public float dashCooldown;
+    [SerializeField] private float dashStaminaRequirement;
+    public float lastDashTime;
+    private bool isDashing;
+    private bool canDash = true;
     private enum MovementState {idle, jump, run, cIdle, cRun}
 
     private void Start()
@@ -34,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
         crouchingCollOffsetY = coll.offset.y/2;
         sprite = GetComponent<SpriteRenderer>();
         staminaSystem = GetComponent<StaminaSystem>();
+        trailRenderer = GetComponent<TrailRenderer>();
+        lastDashTime = Time.time;
     }
 
     private void Update()
@@ -57,6 +69,25 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(dirX * walkSpeed, rb.velocity.y);
                 ColliderStanding();
             }         
+        }
+        if(Input.GetKeyDown(KeyCode.C) && canDash && dashStaminaRequirement <= staminaSystem.currentStamina && Time.time - lastDashTime > dashCooldown)
+        {
+            isDashing = true;
+            canDash = false;
+            trailRenderer.emitting = true;
+            lastDashTime = Time.time;
+            staminaSystem.currentStamina -= dashStaminaRequirement;
+            StartCoroutine(StopDashing());
+        }
+
+        if(isDashing)
+        {
+            rb.velocity = new Vector2(dirX * dashSpeed, 0);
+        }
+
+        if(isGrounded())
+        {
+            canDash = true;
         }
 
         if (rb.bodyType == RigidbodyType2D.Dynamic) AnimationUpdate();
@@ -86,6 +117,13 @@ public class PlayerMovement : MonoBehaviour
         } 
 
         anim.SetInteger("state", (int)state);
+    }
+
+    private IEnumerator StopDashing()
+    {
+        yield return new WaitForSeconds(dashTime);
+        trailRenderer.emitting = false;
+        isDashing = false;
     }
 
     private void ColliderStanding()
