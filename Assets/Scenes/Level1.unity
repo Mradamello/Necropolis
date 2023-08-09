@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18096895}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.533978, y: 2.387, z: 0}
+  m_LocalPosition: {x: 25.53, y: 2.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11889,6 +11889,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ac27749d0b637b4392f849fd79eb981, type: 3}
+--- !u!1 &854856697 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2719610877532004973, guid: 3ac27749d0b637b4392f849fd79eb981, type: 3}
+  m_PrefabInstance: {fileID: 854856696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &854856698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854856697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2004d6a49da3eaa4eb6aed787fd75aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  usingPlayerFollower: 0
+  change: 0
 --- !u!1 &902528919
 GameObject:
   m_ObjectHideFlags: 0
@@ -20275,6 +20295,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ac27749d0b637b4392f849fd79eb981, type: 3}
+--- !u!1 &1517743543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2719610877532004973, guid: 3ac27749d0b637b4392f849fd79eb981, type: 3}
+  m_PrefabInstance: {fileID: 1517743542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1517743544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517743543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2004d6a49da3eaa4eb6aed787fd75aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  usingPlayerFollower: 0
+  change: 0
 --- !u!1 &1519125331
 GameObject:
   m_ObjectHideFlags: 0
@@ -20400,7 +20440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStamina: 0
   maxStamina: 100
-  staminaRegen: 0.15
+  staminaRegen: 0.3
   slider: {fileID: 73820568}
 --- !u!114 &1538236452
 MonoBehaviour:
@@ -25746,7 +25786,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1821723372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.533978, y: -1.8800001, z: 0}
+  m_LocalPosition: {x: 25.53, y: -2.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36188,6 +36228,10 @@ PrefabInstance:
     - target: {fileID: 4730285390583823426, guid: 1a996c224b284454d991db0ac402fcd3, type: 3}
       propertyPath: m_Name
       value: Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730285390583823433, guid: 1a996c224b284454d991db0ac402fcd3, type: 3}
+      propertyPath: speed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4730285390583823433, guid: 1a996c224b284454d991db0ac402fcd3, type: 3}
       propertyPath: waypoints.Array.data[0]

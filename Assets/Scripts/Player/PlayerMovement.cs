@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(isDashing)
         {
-            rb.velocity = new Vector2(dirX * dashSpeed, 0);
+            rb.velocity = new Vector2(dirX * dashSpeed, rb.velocity.y);
         }
 
         if(isGrounded())
