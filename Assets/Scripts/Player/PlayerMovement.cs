@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpStaminaRequirement;
     private TrailRenderer trailRenderer;
 
+    [Header("Wallslide")]
+    [SerializeField] private float timeBeforeSlide;
+    [Range(0.1f, 0.9f)]
+    [SerializeField] private float wallSlideSpeedModifier;
+    [SerializeField] private Transform wallCheckPos;
+    [SerializeField] private Vector2 wallCheckSize = new Vector2(.49f, .03f);
+    private float wallStickTime;
+    //private bool jumpedFromWall = false;
+    private bool isStickingToWall = false;
+    private bool canStickToWall = false;
+
     [Header("Dashing")]
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
@@ -32,6 +44,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     private bool canDash = true;
     private enum MovementState {idle, jump, run, cIdle, cRun}
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(wallCheckPos.position, wallCheckSize);
+    }
 
     private void Start()
     {
@@ -88,6 +106,29 @@ public class PlayerMovement : MonoBehaviour
         if(isGrounded())
         {
             canDash = true;
+            canStickToWall = true;
+        }
+
+        if (isTouchingWall() && /*!facingRight &&*/ !isGrounded() && rb.velocity.y <= 0f && canStickToWall && !isStickingToWall /*&& Time.time - wallStickTime > timeBeforeSlide*/)
+        {
+            canStickToWall = false;
+            isStickingToWall = true;
+            StartCoroutine(StickToWall());
+            //rb.velocity = new Vector2(dirX, rb.velocity.y * wallSlideSpeedModifier);
+        }
+
+        if (isStickingToWall && !isGrounded() && isTouchingWall() && rb.velocity.y <= 0)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        }
+        else if (!isGrounded() && isTouchingWall() && rb.velocity.y <=0 )
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            if(rb.velocity.y == 0f) { rb.velocity = new Vector2(dirX, -.1f); }
+            rb.velocity = new Vector2(dirX, rb.velocity.y * wallSlideSpeedModifier);
+        }else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         if (rb.bodyType == RigidbodyType2D.Dynamic) AnimationUpdate();
@@ -126,6 +167,12 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
     }
 
+    private IEnumerator StickToWall()
+    {
+        yield return new WaitForSeconds(timeBeforeSlide);
+        isStickingToWall = false;
+    }
+
     private void ColliderStanding()
     {   
         isCrouched = false;
@@ -156,5 +203,10 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded() 
     {
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, 0.1f, jumpableGround);
+    }
+
+    private bool isTouchingWall()
+    {
+        return Physics2D.BoxCast(wallCheckPos.position, wallCheckSize, 0f, Vector2.left, 0f, jumpableGround);
     }
 }
