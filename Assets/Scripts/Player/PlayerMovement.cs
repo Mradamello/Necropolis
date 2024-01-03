@@ -28,10 +28,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float timeBeforeSlide;
     [Range(0.1f, 0.9f)]
     [SerializeField] private float wallSlideSpeedModifier;
+    [SerializeField] private float wallJumpVelocity;
     [SerializeField] private Transform wallCheckPos;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(.49f, .03f);
     private float wallStickTime;
     //private bool jumpedFromWall = false;
+    private bool canDoWallJump = false;
     private bool isStickingToWall = false;
     private bool canStickToWall = false;
 
@@ -70,13 +72,28 @@ public class PlayerMovement : MonoBehaviour
     {
         dirX = Input.GetAxis("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && isGrounded() && staminaSystem.currentStamina > jumpStaminaRequirement) {
+        if (Input.GetButtonDown("Jump") && isGrounded() && staminaSystem.currentStamina > jumpStaminaRequirement && !canDoWallJump) {
             if (!hasNoRoom()) {
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 ColliderStanding();
                 staminaSystem.currentStamina -= jumpStaminaRequirement;
             }     
         }
+        //else if(Input.GetButtonDown("Jump") && staminaSystem.currentStamina > jumpStaminaRequirement && canDoWallJump)
+        //{
+        //    if(isTouchingWall() && !facingRight)
+        //    {
+        //        Debug.Log("Performed jump from LEFT wall.");
+        //        rb.velocity = new Vector2(wallJumpVelocity, jumpSpeed * 0.5f);
+        //    }else if(isTouchingWall() && facingRight)
+        //    {
+        //        Debug.Log("Performed jump from RIGHT wall.");
+        //        rb.velocity = new Vector2(-wallJumpVelocity, jumpSpeed * 0.5f);
+        //    }
+        //}
+
+        // add duration to wall jump so you jump for like 0.1sec in the other direction so you can change direction of what keys you press
+
         else if (Input.GetKey("s") && isGrounded()) {  
             rb.velocity = new Vector2(dirX * crouchSpeed, rb.velocity.y);
             ColliderCrouched();
@@ -119,15 +136,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (isStickingToWall && !isGrounded() && isTouchingWall() && rb.velocity.y <= 0)
         {
+            canDoWallJump = true;
             rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         }
         else if (!isGrounded() && isTouchingWall() && rb.velocity.y <=0 )
         {
+            canDoWallJump = true;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             if(rb.velocity.y == 0f) { rb.velocity = new Vector2(dirX, -.1f); }
             rb.velocity = new Vector2(dirX, rb.velocity.y * wallSlideSpeedModifier);
         }else
         {
+            canDoWallJump = false;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
@@ -208,5 +228,10 @@ public class PlayerMovement : MonoBehaviour
     private bool isTouchingWall()
     {
         return Physics2D.BoxCast(wallCheckPos.position, wallCheckSize, 0f, Vector2.left, 0f, jumpableGround);
+    }
+
+    private bool isTouchingWallFromLeft()
+    {
+        return Physics2D.BoxCast(wallCheckPos.position, wallCheckSize, 0f, Vector2.left, 0.1f, jumpableGround);
     }
 }
