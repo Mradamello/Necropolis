@@ -29,10 +29,11 @@ public class PlayerMovement : MonoBehaviour
     [Range(0.1f, 0.9f)]
     [SerializeField] private float wallSlideSpeedModifier;
     [SerializeField] private float wallJumpVelocity;
+    [SerializeField] private float wallJumpTime;
     [SerializeField] private Transform wallCheckPos;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(.49f, .03f);
     private float wallStickTime;
-    //private bool jumpedFromWall = false;
+    private bool wallJumping = false;
     private bool canDoWallJump = false;
     private bool isStickingToWall = false;
     private bool canStickToWall = false;
@@ -72,27 +73,34 @@ public class PlayerMovement : MonoBehaviour
     {
         dirX = Input.GetAxis("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && isGrounded() && staminaSystem.currentStamina > jumpStaminaRequirement && !canDoWallJump) {
+        if (Input.GetButtonDown("Jump") && isGrounded() && staminaSystem.currentStamina > jumpStaminaRequirement && !canDoWallJump && !wallJumping) {
             if (!hasNoRoom()) {
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 ColliderStanding();
                 staminaSystem.currentStamina -= jumpStaminaRequirement;
             }     
         }
-        //else if(Input.GetButtonDown("Jump") && staminaSystem.currentStamina > jumpStaminaRequirement && canDoWallJump)
-        //{
-        //    if(isTouchingWall() && !facingRight)
-        //    {
-        //        Debug.Log("Performed jump from LEFT wall.");
-        //        rb.velocity = new Vector2(wallJumpVelocity, jumpSpeed * 0.5f);
-        //    }else if(isTouchingWall() && facingRight)
-        //    {
-        //        Debug.Log("Performed jump from RIGHT wall.");
-        //        rb.velocity = new Vector2(-wallJumpVelocity, jumpSpeed * 0.5f);
-        //    }
-        //}
+        else if (Input.GetButtonDown("Jump") && staminaSystem.currentStamina > jumpStaminaRequirement && canDoWallJump)
+        {
+            wallJumping = true;
+            Invoke("StopWallJump", wallJumpTime);
+            if (!facingRight && wallJumping)
+            {
+                Debug.Log("Performed jump from LEFT wall.");
+                //Invoke("StopWallJump", wallJumpTime);
+                rb.velocity = new Vector2(wallJumpVelocity, jumpSpeed * 0.5f);
+            }
+            else if (facingRight && wallJumping)
+            {
+                Debug.Log("Performed jump from RIGHT wall.");
+                //Invoke("StopWallJump", wallJumpTime);
+                rb.velocity = new Vector2(-wallJumpVelocity, jumpSpeed * 0.5f);
+            }
+        }
 
         // add duration to wall jump so you jump for like 0.1sec in the other direction so you can change direction of what keys you press
+        // (?) add so you can't stick to wall again for x time, or at all before dropping to ground
+        // add so you can't stick to wall if you are close to ground (?)
 
         else if (Input.GetKey("s") && isGrounded()) {  
             rb.velocity = new Vector2(dirX * crouchSpeed, rb.velocity.y);
@@ -124,6 +132,8 @@ public class PlayerMovement : MonoBehaviour
         {
             canDash = true;
             canStickToWall = true;
+            canDoWallJump = true;
+            wallJumping = false;
         }
 
         if (isTouchingWall() && /*!facingRight &&*/ !isGrounded() && rb.velocity.y <= 0f && canStickToWall && !isStickingToWall /*&& Time.time - wallStickTime > timeBeforeSlide*/)
@@ -230,8 +240,8 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.BoxCast(wallCheckPos.position, wallCheckSize, 0f, Vector2.left, 0f, jumpableGround);
     }
 
-    private bool isTouchingWallFromLeft()
+    private void StopWallJump()
     {
-        return Physics2D.BoxCast(wallCheckPos.position, wallCheckSize, 0f, Vector2.left, 0.1f, jumpableGround);
+        wallJumping = false;
     }
 }
