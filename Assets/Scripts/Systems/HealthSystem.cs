@@ -26,7 +26,7 @@ public class HealthSystem : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (Time.time - lastAttackTime < cooldown) return;
-        if (collision.gameObject.CompareTag("Damagable"))
+        if (collision.gameObject.CompareTag("Damagable") || collision.gameObject.CompareTag("Player"))
         {
             damageSystem = collision.gameObject.GetComponent<DamageSystem>();
             TakeDamage(damageSystem.dmg);
