@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 
 public class InventoryManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    [SerializeField] GameObject Inventory;
     GameObject draggedItem;
     GameObject lastItemSlot;
+    private bool openInventory = false;
 
     void Update()
     {
@@ -15,6 +17,13 @@ public class InventoryManager : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         {
             draggedItem.transform.position = Input.mousePosition;
         }
+
+        if(Input.GetKeyDown("e"))
+        {
+            openInventory = !openInventory;
+        }
+
+        Inventory.SetActive(openInventory);
     }
 
     public void OnPointerDown(PointerEventData eventData)
