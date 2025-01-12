@@ -11225,6 +11225,7 @@ MonoBehaviour:
   characterIcon: {fileID: 746132627}
   characterName: {fileID: 753384320}
   dialogueArea: {fileID: 2073590506}
+  dialogueBox: {fileID: 737213343}
   isDialogueActive: 0
   typingSpeed: 0.02
 --- !u!114 &640013684
