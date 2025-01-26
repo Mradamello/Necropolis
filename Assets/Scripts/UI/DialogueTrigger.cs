@@ -26,6 +26,7 @@ public class Dialogue
 public class DialogueTrigger : MonoBehaviour
 {
     public Dialogue dialogue;
+    public GameObject dialogueBox;
     private bool canDialogue = false;
 
     public void TriggerDialogue()
@@ -54,6 +55,7 @@ public class DialogueTrigger : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             canDialogue = false;
+            dialogueBox.SetActive(false);
         }
     }
 }
