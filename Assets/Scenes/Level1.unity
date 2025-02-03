@@ -11383,6 +11383,7 @@ MonoBehaviour:
         name: Player
         icon: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
       line: Hello I'm a player!
+  dialogueBox: {fileID: 737213343}
 --- !u!1 &640419249
 GameObject:
   m_ObjectHideFlags: 0
